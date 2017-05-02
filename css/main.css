@@ -32,6 +32,9 @@
 	  float: left;
 	  padding-right: 10px;
 	}
+	div{
+				padding-top: 10px;
+	}
 	form > div > div,
 	form > div > fieldset > div {
 	  width: 75%;
