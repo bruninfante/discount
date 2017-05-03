@@ -80,7 +80,7 @@
 	  }
 	  form > div > label,
 	  legend {
-		  width: 100%;
+		width: 100%;
 		float: none;
 		margin: 0 0 5px 0;
 	  }
@@ -104,3 +104,11 @@
 		text-align: right;
 	  }
 	}
+	
+#saveForm{
+	float: right;
+}
+
+.warning-missing{
+	color: red;
+}
