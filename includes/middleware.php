@@ -6,23 +6,27 @@
 
 	if ( isset($_POST['Fn']) ) {
 		$actionFn = filter_input(INPUT_POST, 'Fn', FILTER_SANITIZE_STRING);
-		$idCategory = filter_input(INPUT_POST, 'IdCategory', FILTER_SANITIZE_STRING);
-
-		// $file = 'people.txt';
-		// file_put_contents($file, $idCategory);
 		
-
 		
 		if ( isset($actionFn) ){
 			switch ($actionFn) {
 						case "getProductsFromCategory":
-						//echo "entrou";
+							$idCategory = filter_input(INPUT_POST, 'IdCategory', FILTER_SANITIZE_STRING);
 							$return = $functions->getProductsFromCategory($idCategory);
 							echo $return;
 							break;
-						case "submitForm":
-							$return = $functions->submitForm($_POST['json_list']);
+							
+						case "getOrderId":
+							$return = $functions->getOrderId();
 							echo $return;
+							break;	
+							
+						case "submitForm":
+							$json_list = filter_input(INPUT_POST, 'json_list', FILTER_SANITIZE_STRING);
+							//$idCostumer = filter_input(INPUT_POST, 'IdCustomer', FILTER_SANITIZE_STRING);
+							$return = $functions->submitForm($json_list);
+
+							echo json_encode($return);
 							break;	
 			}
 		}else{

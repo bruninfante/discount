@@ -26,12 +26,42 @@ class Functions{
 		return json_encode($return);
 	}
 	
-	function submitForm($data){
+	function submitForm($idCustomer ,$json_list){
+	
+		$products = file_get_contents('../coding-test-master/data/customers.json');
+		$products = json_decode($customers, true); 
+		
+		$products = file_get_contents('../coding-test-master/data/products.json');
+		$products = json_decode($products, true); 
+		
+		
+		
+		
+		foreach($customers as $customer){
 
+			if($customer['id'] == $idCustomer){
+				$revenue = $customer['revenue'];	
+			}
+		}
+		
+		
+		
+		
+		foreach($json_list as $item){
+			
+		}
 
 
 	}
 	
+	
+	function getOrderId(){
+		$file = '../config/id.txt';
+		$id = file_get_contents($file);
+		$new_id = $id +1;
+		file_put_contents($file , $new_id);
+		return json_encode($id);
+	}
 	
 // The singleton method
     public static function singleton()
