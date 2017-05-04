@@ -1,6 +1,6 @@
 <?php
 	
-	include('./functions.class.php');
+	include_once('./functions.class.php');
 	$functions = Functions::singleton();
 
 
@@ -22,11 +22,10 @@
 							break;	
 							
 						case "submitForm":
-							$json_list = filter_input(INPUT_POST, 'json_list', FILTER_SANITIZE_STRING);
+							$json_list = filter_input(INPUT_POST, 'json_list');
 							//$idCostumer = filter_input(INPUT_POST, 'IdCustomer', FILTER_SANITIZE_STRING);
 							$return = $functions->submitForm($json_list);
-
-							echo json_encode($return);
+							echo $return;
 							break;	
 			}
 		}else{
