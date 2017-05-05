@@ -2,13 +2,17 @@
 class Functions{
 	private static $instance;
 	
+		CONST	ORDER_FOLDER = "../coding-test-master/example-orders/";
+		CONST	CUSTOMERS_FILE = '../coding-test-master/data/customers.json';
+		CONST	PRODUCTS_FILE = '../coding-test-master/data/products.json';
+		
 	public function __construct() {
        
     }
 	
 	function getProductsFromCategory($idCategory){
 	
-		$products = file_get_contents('../coding-test-master/data/products.json');
+		$products = file_get_contents(self::PRODUCTS_FILE);
 		$products = json_decode($products, true); 
 		$return = array();
 		$i = 0;
@@ -31,19 +35,18 @@ class Functions{
 		$count = 0;
 		$total = 0;
 
-		$order_folder = "../coding-test-master/example-orders/";
 
-		$customers = file_get_contents('../coding-test-master/data/customers.json');
+		$customers = file_get_contents(self::CUSTOMERS_FILE);
 		$customers = json_decode($customers, true); 
 
-		$products = file_get_contents('../coding-test-master/data/products.json');
+		$products = file_get_contents(self::PRODUCTS_FILE);
 		$products = json_decode($products, true); 
 
 
 		$json_list = json_decode($json_list, true);
 		
 		
-		file_put_contents($order_folder."order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
+		file_put_contents(self::ORDER_FOLDER."order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
 		
 		
 		if(    ( !isset($json_list['id']) )  ||   ( !isset($json_list['customer-id']) )  ||  ( !isset($json_list['items']) )   || ( !isset($json_list['total']) )  ){
@@ -121,7 +124,7 @@ class Functions{
 		$result['json'] = $json_list;
 		$result['message'] = $message;
 		
-		file_put_contents($order_folder."final_order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
+		file_put_contents(self::ORDER_FOLDER."final_order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
 		
 		echo json_encode($result);
 	}
@@ -139,8 +142,8 @@ class Functions{
     public static function singleton()
     {
         if (!isset(self::$instance)) {
-            $playlists = __CLASS__;
-            self::$instance = new $playlists;
+            $functions = __CLASS__;
+            self::$instance = new $functions;
         }
 
        return self::$instance;
