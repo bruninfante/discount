@@ -8,6 +8,7 @@ class Functions
     CONST ORDER_FOLDER = "../coding-test-master/example-orders/";
     CONST CUSTOMERS_FILE = '../coding-test-master/data/customers.json';
     CONST PRODUCTS_FILE = '../coding-test-master/data/products.json';
+	CONST CONFIG_FILE = '../config/id.conf';
 
     public function __construct()
     {
@@ -134,10 +135,9 @@ class Functions
 
     function getOrderId()
     {
-        $file = '../config/id.txt';
-        $id = file_get_contents($file);
+        $id = file_get_contents(self::CONFIG_FILE);
         $new_id = $id + 1;
-        file_put_contents($file, $new_id);
+        file_put_contents(self::CONFIG_FILE, $new_id);
         return json_encode($id);
     }
 
