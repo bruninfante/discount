@@ -57,6 +57,7 @@ class Functions{
 		
 		}
 		
+		$json_list_new = array();
 		
 		foreach($json_list['items'] as $item){
 				if(    ( !isset($item['product-id']) )  ||   ( !isset($item['quantity']) )  || ( !isset($item['unit-price']) )  ){
@@ -71,8 +72,6 @@ class Functions{
 					}else{
 						if($product['category']  == 1){
 							$count++;
-							if(	$count > 1){
-								$message_20 =  "<p>You got a discount of 20% on your ".$item['product-id'] . " quantity: ". $item['quantity'] ."</p>";
 								if(isset($cheapest)){
 									if($cheapest > $product['price']) {
 										$cheapest = $product['price'];
@@ -84,13 +83,15 @@ class Functions{
 									$cheapest_product = $product['id'];
 									$message_20 =  "<p>You got a discount of 20% on your ".$item['product-id'] . " quantity: ". $item['quantity'] ."</p>";
 								}
-							}
 						}
 					}
 				}
 			}
+			$json_list_new[] = $item;
 		}
+		$json_list['items']  = $json_list_new;
 		
+		$json_list_new = array();
 		foreach($json_list['items'] as $item){
 		
 			if($count > 1){
@@ -101,10 +102,12 @@ class Functions{
 			}
 			$item['total'] = $item['unit-price'] * $item['quantity'];
 			$total = $total +  $item['total'] ;
-			$item['unit-price']  = $total;
+			$json_list_new[] = $item;
+			
 		}
 		
-		
+		//file_put_contents($order_folder."teste.json" , json_encode($json_list_new) ,  FILE_APPEND);
+		$json_list['items']  = $json_list_new;
 		$json_list['total'] = $total;
 		
 		if($revenue >= 1000 ){
