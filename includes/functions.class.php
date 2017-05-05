@@ -27,9 +27,11 @@ class Functions{
 	}
 	
 	function submitForm($json_list){
+		$message = "";
+		$count = 0;
+		$total = 0;
 
-
-		//return $json_list;
+		$order_folder = "../coding-test-master/example-orders/";
 
 		$customers = file_get_contents('../coding-test-master/data/customers.json');
 		$customers = json_decode($customers, true); 
@@ -38,12 +40,15 @@ class Functions{
 		$products = json_decode($products, true); 
 
 
-		
-
 		$json_list = json_decode($json_list, true);
 		
-		file_put_contents("../coding-test-master/example-orders/order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
-		//print_r( $json_list );
+		
+		file_put_contents($order_folder."order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
+		
+		
+		if(    ( !isset($json_list['id']) )  ||   ( !isset($json_list['customer-id']) )  ||  ( !isset($json_list['items']) )   || ( !isset($json_list['total']) )  ){
+					return "Error!!! Json don't have the necessary fields";
+		}
 
 		foreach($customers as $customer){
 			if( $customer['id'] == $json_list['customer-id'] ){
@@ -51,10 +56,71 @@ class Functions{
 			}
 		
 		}
-		print_r( $json_list['items'] );
+		
+		
 		foreach($json_list['items'] as $item){
-			print_r( $item );
+				if(    ( !isset($item['product-id']) )  ||   ( !isset($item['quantity']) )  || ( !isset($item['unit-price']) )  ){
+					return "Error!!! Json don't have the necessary fields";
+				}
+			foreach($products as $product){
+				if( $item['product-id'] ==  $product['id'] ){
+					$item['unit-price']  = $product['price'];
+					if( ($product['category']  == 2) &&  ($item['quantity']  >= 5 ) ){
+						$item['quantity']  = $item['quantity'] +1;
+						$message .=  "<p>You got an extra item on your product ".$item['product-id'] . " quantity: ". $item['quantity'] ."</p>";							
+					}else{
+						if($product['category']  == 1){
+							$count++;
+							if(	$count > 1){
+								$message_20 =  "<p>You got a discount of 20% on your ".$item['product-id'] . " quantity: ". $item['quantity'] ."</p>";
+								if(isset($cheapest)){
+									if($cheapest > $product['price']) {
+										$cheapest = $product['price'];
+										$cheapest_product = $product['id'];
+										$message_20 =  "<p>You got a discount of 20% on your ".$item['product-id'] . " quantity: ". $item['quantity'] ."</p>";
+									}
+								}else{
+									$cheapest = $product['price'];
+									$cheapest_product = $product['id'];
+									$message_20 =  "<p>You got a discount of 20% on your ".$item['product-id'] . " quantity: ". $item['quantity'] ."</p>";
+								}
+							}
+						}
+					}
+				}
+			}
 		}
+		
+		foreach($json_list['items'] as $item){
+		
+			if($count > 1){
+				if( $item['product-id'] ==  $cheapest_product){
+					$item['unit-price']  = $item['unit-price'] * 0.8;
+					$message .= $message_20;
+				}
+			}
+			$item['total'] = $item['unit-price'] * $item['quantity'];
+			$total = $total +  $item['total'] ;
+			$item['unit-price']  = $total;
+		}
+		
+		
+		$json_list['total'] = $total;
+		
+		if($revenue >= 1000 ){
+		
+			$oldtotal = $json_list['total']; 
+			$json_list['total'] = $json_list['total'] * 0.9;
+			$message .=  "<p>You got a bonus discount of 10% on your order.   Old PRICE: ".$oldtotal. "€  ----> NEW PRICE: ".$json_list['total']. "€.</p>";
+		}
+		
+		$message .=  "<p>Your total is: ".$json_list['total']. ".€</p>";
+		$result['json'] = $json_list;
+		$result['message'] = $message;
+		
+		file_put_contents($order_folder."final_order".$json_list['id'].".json" , json_encode($json_list, JSON_PRETTY_PRINT)); 
+		
+		echo json_encode($result);
 	}
 	
 	

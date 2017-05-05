@@ -90,7 +90,7 @@
 			
 			<div class="div_categories">
 				<label id="lbl_categories" >Categories</label>
-				<select id="drp_categories" class="field select medium"  required> 
+				<select id="drp_categories" class="field select medium"  > 
 					<option disabled selected value="0"> -- select an option -- </option>
 					<?php 
 						foreach ($categories as $category){
@@ -104,11 +104,11 @@
 			
 			<div class="div_products">
 				<label class="desc" id="lbl_products" >Products</label>
-				<select id="drp_products" class="field select medium"  required> 
+				<select id="drp_products" class="field select medium"  > 
 					<option disabled selected value='0'> -- select an option -- </option>
 					
 				</select>
-			</div>
+				</div>
 			
 			<div class="prod_quantity">
 				<label class="desc" id="lbl_quantity" for="Field1">Quantity:</label>
@@ -336,6 +336,11 @@
 		var total = 0;
 		var id;
 		if( order != null ){
+			$("#lbl_costumers").removeClass("warning-missing"); 
+			$("#lbl_categories").removeClass("warning-missing"); 
+			$("#lbl_products").removeClass("warning-missing"); 
+			$("#lbl_quantity").removeClass("warning-missing"); 
+		
 			costumer = $("#drp_costumer").val();
 			$.each( order, function( index, value ){
 				total += Number(value['total']);
@@ -364,11 +369,15 @@
 						url: 'includes/middleware.php',
 						data: data,
 						dataType: 'JSON',
-						success: function(response) {							
-							console.log(response);
+						success: function(response) {		
+							//console.log(response['json']);
+							$("#product_list").html("<div  class='product_item'><pre>"+ JSON.stringify(response['json'],null,'\t')+"</pre>"+ response['message'] +"</div>");
+
+							
 						},
 						error: function(response) { 
-							console.log(response);
+							//console.log(response);
+							
 						}
 					});						
 				},
