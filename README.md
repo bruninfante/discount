@@ -22,5 +22,6 @@ In the [data](./data/) directory, you can find source files for customer data an
 You can assume these are in the format of the real external API.
 
 ##INSTALL
+
 Just make git clone https://github.com/bruninfante/discount.git and access root folder with the browser.
 For code editing and save to the repository send me your "email address"
